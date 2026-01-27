@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Children's Stock Holdings Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Stock Holdings Tracker</h1>
+      <div class="controls">
+        <button id="refreshBtn" class="refresh-btn">Refresh Prices</button>
+        <span id="lastUpdated" class="last-updated"></span>
+        <label class="auto-refresh">
+          <input type="checkbox" id="autoRefresh">
+          Auto-refresh (1 min)
+        </label>
+      </div>
+    </header>
+
+    <main id="portfolios" class="portfolios">
+      <!-- Portfolios will be rendered here -->
+    </main>
+  </div>
+
+  <script src="holdings.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
