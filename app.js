@@ -1,30 +1,48 @@
 // Stock Tracker Application
 
-const CORS_PROXY = 'https://corsproxy.io/?';
-const YAHOO_API_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+// Tencent Finance API for US stocks
+const TENCENT_API = 'https://qt.gtimg.cn/q=';
 
 let autoRefreshInterval = null;
 let currentPrices = {};
 let currentTab = 'summary';
 
-// Fetch stock quote from Yahoo Finance
+// Fetch stock quote from Tencent Finance
 async function fetchStockPrice(symbol) {
-  const url = `${CORS_PROXY}${encodeURIComponent(YAHOO_API_BASE + symbol)}`;
+  // Tencent uses 'us' prefix for US stocks
+  const tencentSymbol = 'us' + symbol.toUpperCase();
+  const url = `${TENCENT_API}${tencentSymbol}`;
 
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Failed to fetch ${symbol}`);
   }
 
-  const data = await response.json();
-  const result = data.chart.result[0];
-  const meta = result.meta;
+  const text = await response.text();
+
+  // Parse Tencent response format: v_usQQQ="1~QQQ~...~price~..."
+  // Fields are separated by ~
+  const match = text.match(/="([^"]+)"/);
+  if (!match) {
+    throw new Error(`Invalid response for ${symbol}`);
+  }
+
+  const fields = match[1].split('~');
+
+  // Tencent US stock format:
+  // 0: market, 1: symbol, 2: name, 3: current price, 4: previous close, ...
+  const price = parseFloat(fields[3]);
+  const previousClose = parseFloat(fields[4]);
+
+  if (isNaN(price) || price === 0) {
+    throw new Error(`No price data for ${symbol}`);
+  }
 
   return {
     symbol: symbol,
-    price: meta.regularMarketPrice,
-    previousClose: meta.previousClose,
-    currency: meta.currency
+    price: price,
+    previousClose: previousClose,
+    currency: 'USD'
   };
 }
 
