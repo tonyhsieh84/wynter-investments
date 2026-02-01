@@ -1,32 +1,787 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wynter's Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wynter Hsieh's Portfolio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes float-chrome {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            50% { transform: translateY(-8px) rotateY(10deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            font-size: 12px;
+            color: #fff;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Chrome orb */
+        .chrome-orb {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff69b4, #da70d6, #87ceeb);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float-chrome 4s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(255,105,180,0.5);
+            z-index: 0;
+        }
+
+        .chrome-orb-2 {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #87ceeb, #da70d6, #ff69b4);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float-chrome 5s ease-in-out infinite;
+            animation-delay: 1s;
+            box-shadow: 0 0 30px rgba(135,206,235,0.4);
+            z-index: 0;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .subtitle {
+            font-size: 9px;
+            letter-spacing: 0.4em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff69b4, #da70d6, #87ceeb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(135deg, #ff69b4, #fff, #87ceeb);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+            text-shadow: 0 0 30px rgba(255,105,180,0.5);
+        }
+
+        .header-label {
+            font-size: 10px;
+            color: #888;
+            margin-top: 6px;
+            letter-spacing: 0.2em;
+        }
+
+        /* Main card */
+        .main-card {
+            background: linear-gradient(135deg, rgba(255,105,180,0.15), rgba(135,206,235,0.15));
+            border-radius: 20px;
+            padding: 3px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .main-card-inner {
+            background: rgba(26,26,46,0.95);
+            border-radius: 18px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .total-label {
+            font-size: 9px;
+            color: #ff69b4;
+            letter-spacing: 0.2em;
+            margin-bottom: 6px;
+        }
+
+        .total-value {
+            font-size: 40px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff69b4, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .today-change {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .today-change.positive { color: #7fffd4; }
+        .today-change.negative { color: #ff6b9d; }
+
+        /* Section Header with Toggle */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,105,180,0.2);
+        }
+
+        .section-title {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: #888;
+        }
+
+        .section-toggle {
+            font-size: 10px;
+            color: #ff69b4;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .section-toggle:hover {
+            color: #fff;
+        }
+
+        /* Holdings */
+        .holdings {
+            margin-bottom: 20px;
+        }
+
+        .stock-row {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,105,180,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .stock-row:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,105,180,0.3);
+            transform: translateX(4px);
+        }
+
+        .stock-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #ff69b4, #da70d6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+        }
+
+        .stock-info {
+            flex: 1;
+        }
+
+        .stock-symbol {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .stock-shares {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .stock-values {
+            text-align: right;
+        }
+
+        .stock-total {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .stock-change {
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .stock-change.positive { color: #7fffd4; }
+        .stock-change.negative { color: #ff6b9d; }
+
+        /* Transaction History */
+        .history {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .history.visible {
+            display: block;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 6px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,105,180,0.1);
+        }
+
+        .history-table th {
+            font-size: 8px;
+            font-weight: 500;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .history-table td.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .history-table th.num {
+            text-align: right;
+        }
+
+        .history-table tbody tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .history-table tfoot {
+            border-top: 2px solid rgba(255,105,180,0.3);
+        }
+
+        .history-table tfoot td {
+            font-weight: 700;
+            padding-top: 14px;
+            color: #ff69b4;
+        }
+
+        .positive { color: #7fffd4; }
+        .negative { color: #ff6b9d; }
+
+        /* Footer */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,105,180,0.2);
+        }
+
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            color: #888;
+        }
+
+        .auto-refresh input[type="checkbox"] {
+            accent-color: #ff69b4;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #ff69b4, #da70d6);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255,105,180,0.3);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255,105,180,0.5);
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 0;
+            color: #888;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,105,180,0.2);
+            border-top-color: #ff69b4;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(255,107,157,0.1);
+            border: 1px solid rgba(255,107,157,0.3);
+            padding: 16px;
+            border-radius: 12px;
+            color: #ff6b9d;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .total-value {
+                font-size: 32px;
+            }
+
+            .chrome-orb {
+                width: 40px;
+                height: 40px;
+                top: 20px;
+                right: 20px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .refresh-btn {
+                width: 100%;
+            }
+
+            .history-table {
+                font-size: 9px;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Wynter's Portfolio</h1>
-      <div class="controls">
-        <button id="refreshBtn" class="refresh-btn">Refresh Prices</button>
-        <span id="lastUpdated" class="last-updated"></span>
-        <label class="auto-refresh">
-          <input type="checkbox" id="autoRefresh">
-          Auto-refresh (1 min)
-        </label>
-      </div>
-    </header>
+    <!-- Decorative elements -->
+    <div class="chrome-orb"></div>
+    <div class="chrome-orb-2"></div>
 
-    <main id="portfolios" class="portfolios">
-      <!-- Portfolios will be rendered here -->
-    </main>
-  </div>
+    <div class="container">
+        <header>
+            <div class="subtitle">✧ CYBER PRINCESS ✧</div>
+            <h1>WYNTER HSIEH</h1>
+            <div class="header-label">💎 PORTFOLIO 💎</div>
+        </header>
 
-  <script src="holdings.js"></script>
-  <script src="app.js"></script>
+        <div id="content">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <div>Loading portfolio...</div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="auto-refresh">
+                <input type="checkbox" id="autoRefresh" checked>
+                <label for="autoRefresh">Auto-refresh: 1 min</label>
+            </div>
+            <button class="refresh-btn" id="refreshBtn" onclick="fetchPrices()">
+                ✦ REFRESH ✦
+            </button>
+        </footer>
+    </div>
+
+    <!-- Sparkles -->
+    <script>
+        // Create sparkles
+        for (let i = 0; i < 12; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.innerHTML = '✦';
+            sparkle.style.top = `${15 + Math.random() * 70}%`;
+            sparkle.style.left = `${Math.random() * 100}%`;
+            sparkle.style.animation = `sparkle ${2 + Math.random()}s ease-in-out infinite`;
+            sparkle.style.animationDelay = `${Math.random() * 2}s`;
+            document.body.appendChild(sparkle);
+        }
+    </script>
+
+    <script>
+        // Wynter's Portfolio
+        const PORTFOLIO = [
+            { symbol: 'QQQ', shares: 3.4656, costBasis: 517.45 }
+        ];
+
+        // Transaction history
+        const TRANSACTIONS = [
+            { date: "2024-11-01", symbol: "QQQ", rmb: 600, usd: 84.73, price: 487.43, shares: 0.1738, note: "Allowance" },
+            { date: "2025-01-02", symbol: "QQQ", rmb: 300, usd: 41.21, price: 510.23, shares: 0.0808, note: "Allowance" },
+            { date: "2025-01-02", symbol: "QQQ", rmb: 6000, usd: 824.26, price: 510.23, shares: 1.6155, note: "Red Pocket" },
+            { date: "2025-02-03", symbol: "QQQ", rmb: 4170, usd: 571.14, price: 518.11, shares: 1.1024, note: "Allowance" },
+            { date: "2025-04-01", symbol: "QQQ", rmb: 350, usd: 48.27, price: 472.70, shares: 0.1021, note: "Allowance" },
+            { date: "2025-05-01", symbol: "QQQ", rmb: 200, usd: 27.43, price: 481.68, shares: 0.0569, note: "Allowance" },
+            { date: "2025-06-02", symbol: "QQQ", rmb: 200, usd: 27.70, price: 523.21, shares: 0.0529, note: "Allowance" },
+            { date: "2025-07-01", symbol: "QQQ", rmb: 200, usd: 27.85, price: 546.99, shares: 0.0509, note: "Allowance" },
+            { date: "2025-08-01", symbol: "QQQ", rmb: 100, usd: 13.94, price: 553.88, shares: 0.0252, note: "Allowance" },
+            { date: "2025-10-01", symbol: "QQQ", rmb: 200, usd: 28.07, price: 603.25, shares: 0.0465, note: "Allowance" },
+            { date: "2025-11-03", symbol: "QQQ", rmb: 300, usd: 42.13, price: 632.08, shares: 0.0667, note: "Allowance" },
+            { date: "2025-12-01", symbol: "QQQ", rmb: 200, usd: 28.15, price: 617.17, shares: 0.0456, note: "Allowance" },
+            { date: "2026-01-02", symbol: "QQQ", rmb: 200, usd: 28.38, price: 613.12, shares: 0.0463, note: "Allowance" }
+        ];
+
+        // Tencent Finance API (works in China without VPN)
+        const TENCENT_API = 'https://qt.gtimg.cn/q=';
+
+        let autoRefreshInterval = null;
+        let historyVisible = false;
+        let currentPrices = {};
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(value);
+        }
+
+        function formatChange(value) {
+            const sign = value >= 0 ? '+' : '';
+            return sign + formatCurrency(value);
+        }
+
+        function formatPercent(value) {
+            const sign = value >= 0 ? '+' : '';
+            return sign + value.toFixed(2) + '%';
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        async function fetchStockPrice(symbol) {
+            try {
+                const tencentSymbol = 'us' + symbol.toUpperCase();
+                const response = await fetch(`${TENCENT_API}${tencentSymbol}`);
+                const text = await response.text();
+
+                const match = text.match(/="([^"]+)"/);
+                if (match) {
+                    const fields = match[1].split('~');
+                    const price = parseFloat(fields[3]);
+                    const previousClose = parseFloat(fields[4]);
+
+                    if (!isNaN(price) && price > 0) {
+                        const change = price - previousClose;
+                        return {
+                            symbol: symbol,
+                            name: fields[2] || symbol,
+                            price: price,
+                            previousClose: previousClose,
+                            change: change,
+                            changePercent: (change / previousClose) * 100
+                        };
+                    }
+                }
+            } catch (error) {
+                console.error(`Error fetching ${symbol}:`, error);
+            }
+
+            return {
+                symbol: symbol,
+                name: symbol,
+                price: null,
+                change: null,
+                changePercent: null,
+                error: true
+            };
+        }
+
+        async function fetchPrices() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const content = document.getElementById('content');
+
+            refreshBtn.disabled = true;
+            refreshBtn.textContent = 'LOADING...';
+
+            try {
+                const stockData = await Promise.all(
+                    PORTFOLIO.map(async (holding) => {
+                        const data = await fetchStockPrice(holding.symbol);
+                        currentPrices[holding.symbol] = data.price;
+                        const totalValue = data.price ? data.price * holding.shares : null;
+                        const totalCost = holding.costBasis * holding.shares;
+                        const gainLoss = totalValue ? totalValue - totalCost : null;
+                        const gainLossPercent = gainLoss ? (gainLoss / totalCost) * 100 : null;
+
+                        return {
+                            ...data,
+                            shares: holding.shares,
+                            costBasis: holding.costBasis,
+                            totalValue: totalValue,
+                            totalCost: totalCost,
+                            gainLoss: gainLoss,
+                            gainLossPercent: gainLossPercent,
+                            todayChange: data.change ? data.change * holding.shares : null
+                        };
+                    })
+                );
+
+                renderPortfolio(stockData);
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="error">
+                        Unable to fetch prices. Please try again.
+                    </div>
+                `;
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = '✦ REFRESH ✦';
+            }
+        }
+
+        function toggleHistory() {
+            historyVisible = !historyVisible;
+            const historySection = document.getElementById('history-section');
+            const toggleLink = document.getElementById('history-toggle');
+            if (historySection) {
+                historySection.classList.toggle('visible', historyVisible);
+                toggleLink.textContent = historyVisible ? 'Hide History' : 'View History';
+            }
+        }
+
+        function renderHistory() {
+            const totalRmb = TRANSACTIONS.reduce((sum, tx) => sum + tx.rmb, 0);
+            const totalUsd = TRANSACTIONS.reduce((sum, tx) => sum + tx.usd, 0);
+            const totalShares = TRANSACTIONS.reduce((sum, tx) => sum + tx.shares, 0);
+
+            const rows = TRANSACTIONS.map(tx => {
+                const currentPrice = currentPrices[tx.symbol];
+                const currentValue = currentPrice ? tx.shares * currentPrice : null;
+                const gainLoss = currentValue ? currentValue - tx.usd : null;
+                const changeClass = gainLoss === null ? '' : (gainLoss >= 0 ? 'positive' : 'negative');
+
+                return `
+                    <tr>
+                        <td>${formatDate(tx.date)}</td>
+                        <td><strong>${tx.symbol}</strong></td>
+                        <td>${tx.note}</td>
+                        <td class="num">¥${tx.rmb.toLocaleString()}</td>
+                        <td class="num">${formatCurrency(tx.usd)}</td>
+                        <td class="num">${tx.shares.toFixed(4)}</td>
+                        <td class="num ${changeClass}">${gainLoss !== null ? formatChange(gainLoss) : '—'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            return `
+                <div id="history-section" class="history ${historyVisible ? 'visible' : ''}">
+                    <div class="section-header">
+                        <span class="section-title">TRANSACTION HISTORY</span>
+                    </div>
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Symbol</th>
+                                <th>Note</th>
+                                <th class="num">RMB</th>
+                                <th class="num">Cost</th>
+                                <th class="num">Shares</th>
+                                <th class="num">Gain/Loss</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"><strong>Total</strong></td>
+                                <td class="num">¥${totalRmb.toLocaleString()}</td>
+                                <td class="num">${formatCurrency(totalUsd)}</td>
+                                <td class="num">${totalShares.toFixed(4)}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderPortfolio(stocks) {
+            const content = document.getElementById('content');
+
+            if (!stocks || stocks.length === 0) {
+                content.innerHTML = `
+                    <div class="loading">
+                        No holdings found. Add stocks to your portfolio.
+                    </div>
+                `;
+                return;
+            }
+
+            const totalValue = stocks.reduce((sum, s) => sum + (s.totalValue || 0), 0);
+            const totalCost = stocks.reduce((sum, s) => sum + s.totalCost, 0);
+            const totalGainLoss = totalValue - totalCost;
+            const totalGainLossPercent = (totalGainLoss / totalCost) * 100;
+            const changeClass = totalGainLoss >= 0 ? 'positive' : 'negative';
+
+            let holdingsHTML = stocks.map(stock => {
+                const stockChangeClass = stock.gainLoss >= 0 ? 'positive' : 'negative';
+                const priceDisplay = stock.price ? formatCurrency(stock.price) : 'Error';
+                const valueDisplay = stock.totalValue ? formatCurrency(stock.totalValue) : '—';
+                const changeDisplay = stock.gainLoss !== null
+                    ? `${formatChange(stock.gainLoss)} (${formatPercent(stock.gainLossPercent)})`
+                    : '—';
+
+                return `
+                    <div class="stock-row">
+                        <div class="stock-icon">${stock.symbol.slice(0, 2)}</div>
+                        <div class="stock-info">
+                            <div class="stock-symbol">${stock.symbol}</div>
+                            <div class="stock-shares">${stock.shares.toFixed(4)} shares × ${priceDisplay}</div>
+                        </div>
+                        <div class="stock-values">
+                            <div class="stock-total">${valueDisplay}</div>
+                            <div class="stock-change ${stockChangeClass}">${changeDisplay}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="main-card">
+                    <div class="main-card-inner">
+                        <div style="text-align: center;">
+                            <div class="total-label">TOTAL VALUE</div>
+                            <div class="total-value">${formatCurrency(totalValue)}</div>
+                            <div class="today-change ${changeClass}">
+                                ${totalGainLoss >= 0 ? '📈' : '📉'} ${formatChange(totalGainLoss)} (${formatPercent(totalGainLossPercent)})
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="holdings">
+                    <div class="section-header">
+                        <span class="section-title">HOLDINGS</span>
+                        <a id="history-toggle" class="section-toggle" onclick="toggleHistory()">View History</a>
+                    </div>
+                    ${holdingsHTML}
+                </div>
+
+                ${renderHistory()}
+            `;
+        }
+
+        function setupAutoRefresh() {
+            const checkbox = document.getElementById('autoRefresh');
+
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    autoRefreshInterval = setInterval(fetchPrices, 60000);
+                } else {
+                    clearInterval(autoRefreshInterval);
+                }
+            });
+
+            autoRefreshInterval = setInterval(fetchPrices, 60000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPrices();
+            setupAutoRefresh();
+        });
+    </script>
 </body>
 </html>
