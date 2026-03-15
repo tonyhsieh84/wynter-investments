@@ -661,6 +661,7 @@
                         <td><strong>${tx.symbol}</strong></td>
                         <td>${tx.note}</td>
                         <td class="num">¥${tx.rmb.toLocaleString()}</td>
+                        <td class="num">${formatCurrency(tx.price)}</td>
                         <td class="num">${formatCurrency(tx.usd)}</td>
                         <td class="num">${tx.shares.toFixed(4)}</td>
                         <td class="num ${changeClass}">${gainLoss !== null ? formatChange(gainLoss) : '—'}</td>
@@ -680,6 +681,7 @@
                                 <th>Symbol</th>
                                 <th>Note</th>
                                 <th class="num">RMB</th>
+                                <th class="num">Price</th>
                                 <th class="num">Cost</th>
                                 <th class="num">Shares</th>
                                 <th class="num">Gain/Loss</th>
@@ -692,6 +694,7 @@
                             <tr>
                                 <td colspan="3"><strong>Total</strong></td>
                                 <td class="num">¥${totalRmb.toLocaleString()}</td>
+                                <td class="num"></td>
                                 <td class="num">${formatCurrency(totalUsd)}</td>
                                 <td class="num">${totalShares.toFixed(4)}</td>
                                 <td></td>
