@@ -612,8 +612,8 @@
                     currentPrices[holding.symbol] = data.price;
                     const totalValue = data.price ? data.price * holding.shares : null;
                     const totalCost = holding.costBasis * holding.shares;
-                    const gainLoss = totalValue ? totalValue - totalCost : null;
-                    const gainLossPercent = gainLoss ? (gainLoss / totalCost) * 100 : null;
+                    const gainLoss = totalValue !== null ? totalValue - totalCost : null;
+                    const gainLossPercent = gainLoss !== null ? (gainLoss / totalCost) * 100 : null;
 
                     return {
                         ...data,
