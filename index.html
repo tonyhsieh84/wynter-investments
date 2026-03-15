@@ -553,42 +553,46 @@
             return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
         }
 
-        async function fetchStockPrice(symbol) {
-            try {
-                const tencentSymbol = 'us' + symbol.toUpperCase();
-                const response = await fetch(`${TENCENT_API}${tencentSymbol}`);
-                const text = await response.text();
-
-                const match = text.match(/="([^"]+)"/);
-                if (match) {
-                    const fields = match[1].split('~');
-                    const price = parseFloat(fields[3]);
-                    const previousClose = parseFloat(fields[4]);
-
-                    if (!isNaN(price) && price > 0) {
-                        const change = price - previousClose;
-                        return {
-                            symbol: symbol,
-                            name: fields[2] || symbol,
-                            price: price,
-                            previousClose: previousClose,
-                            change: change,
-                            changePercent: (change / previousClose) * 100
-                        };
-                    }
-                }
-            } catch (error) {
-                console.error(`Error fetching ${symbol}:`, error);
-            }
-
-            return {
-                symbol: symbol,
-                name: symbol,
-                price: null,
-                change: null,
-                changePercent: null,
-                error: true
-            };
+        // Fetch stock prices from Tencent Finance API via JSONP (avoids CORS)
+        function fetchStockPrices(symbols) {
+            return new Promise((resolve) => {
+                const tencentSymbols = symbols.map(s => 'us' + s.toUpperCase()).join(',');
+                const script = document.createElement('script');
+                script.src = `${TENCENT_API}${tencentSymbols}`;
+                script.onload = () => {
+                    const results = {};
+                    symbols.forEach(symbol => {
+                        const varName = 'v_us' + symbol.toUpperCase();
+                        const raw = window[varName];
+                        if (raw && raw.length > 0) {
+                            const fields = raw.split('~');
+                            const price = parseFloat(fields[3]);
+                            const previousClose = parseFloat(fields[4]);
+                            if (!isNaN(price) && price > 0) {
+                                const change = price - previousClose;
+                                results[symbol] = {
+                                    symbol, name: fields[2] || symbol,
+                                    price, previousClose, change,
+                                    changePercent: (change / previousClose) * 100
+                                };
+                                return;
+                            }
+                        }
+                        results[symbol] = { symbol, name: symbol, price: null, change: null, changePercent: null, error: true };
+                    });
+                    script.remove();
+                    resolve(results);
+                };
+                script.onerror = () => {
+                    const results = {};
+                    symbols.forEach(symbol => {
+                        results[symbol] = { symbol, name: symbol, price: null, change: null, changePercent: null, error: true };
+                    });
+                    script.remove();
+                    resolve(results);
+                };
+                document.head.appendChild(script);
+            });
         }
 
         async function fetchPrices() {
@@ -599,27 +603,25 @@
             refreshBtn.textContent = 'LOADING...';
 
             try {
-                const stockData = await Promise.all(
-                    PORTFOLIO.map(async (holding) => {
-                        const data = await fetchStockPrice(holding.symbol);
-                        currentPrices[holding.symbol] = data.price;
-                        const totalValue = data.price ? data.price * holding.shares : null;
-                        const totalCost = holding.costBasis * holding.shares;
-                        const gainLoss = totalValue ? totalValue - totalCost : null;
-                        const gainLossPercent = gainLoss ? (gainLoss / totalCost) * 100 : null;
+                const symbols = PORTFOLIO.map(h => h.symbol);
+                const priceData = await fetchStockPrices(symbols);
 
-                        return {
-                            ...data,
-                            shares: holding.shares,
-                            costBasis: holding.costBasis,
-                            totalValue: totalValue,
-                            totalCost: totalCost,
-                            gainLoss: gainLoss,
-                            gainLossPercent: gainLossPercent,
-                            todayChange: data.change ? data.change * holding.shares : null
-                        };
-                    })
-                );
+                const stockData = PORTFOLIO.map(holding => {
+                    const data = priceData[holding.symbol];
+                    currentPrices[holding.symbol] = data.price;
+                    const totalValue = data.price ? data.price * holding.shares : null;
+                    const totalCost = holding.costBasis * holding.shares;
+                    const gainLoss = totalValue ? totalValue - totalCost : null;
+                    const gainLossPercent = gainLoss ? (gainLoss / totalCost) * 100 : null;
+
+                    return {
+                        ...data,
+                        shares: holding.shares,
+                        costBasis: holding.costBasis,
+                        totalValue, totalCost, gainLoss, gainLossPercent,
+                        todayChange: data.change ? data.change * holding.shares : null
+                    };
+                });
 
                 renderPortfolio(stockData);
             } catch (error) {
